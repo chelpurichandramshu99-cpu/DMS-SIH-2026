@@ -4,12 +4,14 @@
   "description": "",
   "main": "index.js",
   "type": "module",
-  "scripts": {
-    "start": "node src/server.js",
-    "dev": "node --watch src/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "prisma skills sync || exit 0"
-  },
+ "scripts": {
+  "start": "node src/server.js",
+  "dev": "node --watch src/server.js",
+  "test": "echo \"Error: no test specified\" && exit 1",
+  "compile": "hardhat compile",
+  "deploy:sepolia": "hardhat run scripts/deploy-sepolia.ts --network sepolia",
+  "postinstall": "prisma skills sync || exit 0"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
