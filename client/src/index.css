@@ -451,3 +451,177 @@ textarea.input-field {
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+/* --- Login Page Responsive Styles --- */
+.login-top-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height);
+  background-color: var(--govt-navy);
+  color: #ffffff;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 3px solid var(--govt-gold);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  z-index: 1000;
+}
+
+.login-header-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.login-main-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.login-sub-title {
+  font-size: 0.78rem;
+  opacity: 0.9;
+}
+
+.login-page-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: calc(var(--header-height) + 40px);
+  padding-bottom: 40px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 12px 30px -5px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.08);
+  border-top: 4px solid var(--govt-navy);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
+.login-card-header {
+  flex-direction: column;
+  text-align: center;
+  gap: 10px;
+  padding: 28px 24px 16px;
+}
+
+.login-icon-wrapper {
+  background: #e0f2fe;
+  padding: 14px;
+  border-radius: 50%;
+  display: inline-flex;
+  color: var(--govt-navy);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.login-card-title {
+  font-size: 1.35rem;
+  color: var(--govt-navy);
+  margin: 0;
+}
+
+.login-card-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.login-card-body {
+  padding: 24px 28px;
+}
+
+.login-card-footer {
+  padding: 14px 20px;
+  background: #f8fafc;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Mobile Responsiveness (< 768px) */
+@media (max-width: 768px) {
+  .login-top-header {
+    height: auto;
+    min-height: var(--header-height);
+    padding: 12px 16px;
+    position: sticky; /* Changing to sticky on mobile prevents overlap issues with dynamic height */
+  }
+  
+  .login-header-content {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .login-header-icon {
+    display: none; /* Hide icon on small screens to save vertical space */
+  }
+  
+  .login-main-title {
+    font-size: 0.9rem;
+    line-height: 1.3;
+    /* Ensure no awkward wrapping if possible, or center nicely */
+    display: block;
+  }
+  
+  .login-sub-title {
+    font-size: 0.75rem;
+    line-height: 1.2;
+    display: block;
+    margin-top: 2px;
+  }
+  
+  .login-page-container {
+    /* Since header is sticky, we don't need the header-height padding top anymore */
+    padding-top: 24px;
+    padding-bottom: 24px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  
+  .login-card-header {
+    padding: 20px 16px 12px;
+    gap: 8px;
+  }
+  
+  .login-icon-wrapper {
+    padding: 10px;
+  }
+  
+  .login-lock-icon {
+    width: 22px;
+    height: 22px;
+  }
+  
+  .login-card-title {
+    font-size: 1.15rem;
+  }
+  
+  .login-card-subtitle {
+    font-size: 0.8rem;
+  }
+  
+  .login-card-body {
+    padding: 16px 20px;
+  }
+  
+  .login-card-footer {
+    padding: 12px 16px;
+    font-size: 0.7rem;
+    line-height: 1.3;
+  }
+}

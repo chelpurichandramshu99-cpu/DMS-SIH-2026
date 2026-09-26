@@ -40,29 +40,14 @@ export const Login = () => {
       background: 'var(--bg-main)'
     }}>
       {/* Fixed Top Header Navbar */}
-      <header style={{ 
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        height: 'var(--header-height)',
-        backgroundColor: 'var(--govt-navy)',
-        color: '#ffffff',
-        padding: '0 24px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderBottom: '3px solid var(--govt-gold)',
-        boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
-        zIndex: 1000
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', textAlign: 'center' }}>
-          <ShieldCheck size={28} color="#ffffff" />
-          <div>
-            <div style={{ fontWeight: 700, fontSize: '1.05rem', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+      <header className="login-top-header">
+        <div className="login-header-content">
+          <ShieldCheck className="login-header-icon" size={28} color="#ffffff" />
+          <div className="login-header-text">
+            <div className="login-main-title">
               Secure Digital Document Management System
             </div>
-            <div style={{ fontSize: '0.78rem', opacity: 0.9 }}>
+            <div className="login-sub-title">
               Official Case & Digital Evidence Authorization Portal
             </div>
           </div>
@@ -70,43 +55,19 @@ export const Login = () => {
       </header>
 
       {/* Main Login Form Box Container with Top Offset */}
-      <div style={{ 
-        flex: 1, 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        paddingTop: 'calc(var(--header-height) + 40px)',
-        paddingBottom: '40px',
-        paddingLeft: '20px',
-        paddingRight: '20px'
-      }}>
-        <div className="gov-card" style={{ 
-          width: '100%', 
-          maxWidth: '440px',
-          boxShadow: '0 12px 30px -5px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.08)',
-          borderTop: '4px solid var(--govt-navy)',
-          borderRadius: '6px',
-          overflow: 'hidden',
-          marginBottom: 0
-        }}>
-          <div className="gov-card-header" style={{ flexDirection: 'column', textAlign: 'center', gap: '10px', padding: '28px 24px 16px' }}>
-            <div style={{ 
-              background: '#e0f2fe', 
-              padding: '14px', 
-              borderRadius: '50%',
-              display: 'inline-flex',
-              color: 'var(--govt-navy)',
-              boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
-            }}>
-              <Lock size={28} />
+      <div className="login-page-container">
+        <div className="gov-card login-card">
+          <div className="gov-card-header login-card-header">
+            <div className="login-icon-wrapper">
+              <Lock size={28} className="login-lock-icon" />
             </div>
-            <h1 style={{ fontSize: '1.35rem', color: 'var(--govt-navy)', margin: 0 }}>Official User Login</h1>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.4 }}>
+            <h1 className="login-card-title">Official User Login</h1>
+            <p className="login-card-subtitle">
               Enter your authorized department credentials to access the system.
             </p>
           </div>
 
-          <div className="gov-card-body" style={{ padding: '24px 28px' }}>
+          <div className="gov-card-body login-card-body">
             {error && (
               <div style={{ 
                 background: 'var(--danger-bg)', 
@@ -187,15 +148,7 @@ export const Login = () => {
             </form>
           </div>
 
-          <div style={{ 
-            padding: '14px 20px', 
-            background: '#f8fafc', 
-            borderTop: '1px solid var(--border-color)', 
-            textAlign: 'center',
-            fontSize: '0.75rem',
-            color: 'var(--text-muted)',
-            fontWeight: 500
-          }}>
+          <div className="login-card-footer">
             Restricted System • Unauthorized access is strictly prohibited and monitored.
           </div>
         </div>
