@@ -22,10 +22,10 @@ export const login = async (req,res) =>{
             }
         );
     } catch(error){
-        console.error(error.message);
+        console.error("Login Error:", error.message, error.stack);
         return res.status(500).json(
             {
-                message: "Internal server error"
+                message: "Internal server error: " + error.message
             }
         );
     }
