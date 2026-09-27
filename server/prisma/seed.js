@@ -270,7 +270,18 @@ async function main() {
     }
   }
 
-  console.log("Permissions and roles seeded successfully.");
+  // Seed default Organization Unit
+  await prisma.organizationUnit.upsert({
+    where: { code: "HQ-001" },
+    update: {},
+    create: {
+      name: "Central Headquarters",
+      code: "HQ-001",
+      isActive: true,
+    },
+  });
+
+  console.log("Permissions, roles, and default organization unit seeded successfully.");
 }
 
 main()
