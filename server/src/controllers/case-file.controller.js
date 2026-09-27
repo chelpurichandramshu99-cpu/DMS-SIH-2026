@@ -249,7 +249,7 @@ export const uploadCaseFile = async (req, res) => {
     console.error("Case file upload failed:", error);
 
     return res.status(500).json({
-      message: "Case file upload failed",
+      message: "Case file upload failed: " + error.message,
       error: error.message,
     });
   }

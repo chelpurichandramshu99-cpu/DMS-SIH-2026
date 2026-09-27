@@ -1193,7 +1193,7 @@ export const CaseDetails = () => {
                   <label className="input-label">Select Officer User *</label>
                   <select className="input-field" value={userAssignForm.userId} onChange={(e) => setUserAssignForm({ ...userAssignForm, userId: e.target.value })} required>
                     <option value="">Choose User...</option>
-                    {users.map(u => <option key={u.id} value={u.id}>{u.name} ({u.email})</option>)}
+                    {users.filter(u => u.isActive).map(u => <option key={u.id} value={u.id}>{u.name} ({u.email})</option>)}
                   </select>
                 </div>
               </div>

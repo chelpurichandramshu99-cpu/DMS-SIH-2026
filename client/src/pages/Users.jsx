@@ -17,12 +17,11 @@ export const Users = () => {
   const [submitting, setSubmitting] = useState(false);
   const [modalError, setModalError] = useState('');
 
-  // Form states
   const [userForm, setUserForm] = useState({
     name: '',
     email: '',
     password: '',
-    organizationUnitId: '',
+    unitId: '',
     roleId: ''
   });
 
@@ -75,7 +74,7 @@ export const Users = () => {
     try {
       await api.post('/users', userForm);
       setActiveModal(null);
-      setUserForm({ name: '', email: '', password: '', organizationUnitId: '', roleId: '' });
+      setUserForm({ name: '', email: '', password: '', unitId: '', roleId: '' });
       fetchData();
     } catch (err) {
       setModalError(err.response?.data?.message || err.response?.data?.error || 'Failed to provision user account.');
@@ -328,7 +327,7 @@ export const Users = () => {
                   {units.length > 0 && (
                     <div className="input-group">
                       <label className="input-label">Assigned Unit</label>
-                      <select className="input-field" value={userForm.organizationUnitId} onChange={(e) => setUserForm({ ...userForm, organizationUnitId: e.target.value })}>
+                      <select className="input-field" value={userForm.unitId} onChange={(e) => setUserForm({ ...userForm, unitId: e.target.value })}>
                         <option value="">Select Unit...</option>
                         {units.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
                       </select>

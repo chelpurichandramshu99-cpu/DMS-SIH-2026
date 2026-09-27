@@ -20,13 +20,20 @@ export const uploadFileToStorage = async (file) => {
   const objectKey = `test/${Date.now()}-${file.originalname}`;
 
   if (bucketName) {
-    const command = new PutObjectCommand({
-      Bucket: bucketName,
-      Key: objectKey,
-      Body: file.buffer,
-      ContentType: file.mimetype,
-    });
-    await s3Client.send(command);
+    try {
+      const command = new PutObjectCommand({
+        Bucket: bucketName,
+        Key: objectKey,
+        Body: file.buffer,
+        ContentType: file.mimetype,
+      });
+      await s3Client.send(command);
+    } catch (s3Error) {
+      console.warn("S3 upload failed, falling back to local storage:", s3Error.message);
+      const fullPath = path.join(localUploadsDir, objectKey);
+      await fs.mkdir(path.dirname(fullPath), { recursive: true });
+      await fs.writeFile(fullPath, file.buffer);
+    }
   } else {
     const fullPath = path.join(localUploadsDir, objectKey);
     await fs.mkdir(path.dirname(fullPath), { recursive: true });
@@ -42,11 +49,22 @@ export const uploadFileToStorage = async (file) => {
 
 export const getFileFromStorage = async (objectKey) => {
   if (bucketName) {
-    const command = new GetObjectCommand({
-      Bucket: bucketName,
-      Key: objectKey,
-    });
-    return await s3Client.send(command);
+    try {
+      const command = new GetObjectCommand({
+        Bucket: bucketName,
+        Key: objectKey,
+      });
+      return await s3Client.send(command);
+    } catch (s3Error) {
+      console.warn("S3 get failed, falling back to local storage:", s3Error.message);
+      const fullPath = path.join(localUploadsDir, objectKey);
+      const buffer = await fs.readFile(fullPath);
+      return {
+        Body: {
+          transformToByteArray: async () => new Uint8Array(buffer),
+        },
+      };
+    }
   } else {
     const fullPath = path.join(localUploadsDir, objectKey);
     const buffer = await fs.readFile(fullPath);
@@ -69,13 +87,20 @@ export const uploadCaseFileToStorage = async ({ file, caseId, fileId }) => {
   const objectKey = `cases/${caseId}/files/${fileId}${ext}`;
 
   if (bucketName) {
-    const command = new PutObjectCommand({
-      Bucket: bucketName,
-      Key: objectKey,
-      Body: file.buffer,
-      ContentType: file.mimetype,
-    });
-    await s3Client.send(command);
+    try {
+      const command = new PutObjectCommand({
+        Bucket: bucketName,
+        Key: objectKey,
+        Body: file.buffer,
+        ContentType: file.mimetype,
+      });
+      await s3Client.send(command);
+    } catch (s3Error) {
+      console.warn("S3 upload failed, falling back to local storage:", s3Error.message);
+      const fullPath = path.join(localUploadsDir, objectKey);
+      await fs.mkdir(path.dirname(fullPath), { recursive: true });
+      await fs.writeFile(fullPath, file.buffer);
+    }
   } else {
     const fullPath = path.join(localUploadsDir, objectKey);
     await fs.mkdir(path.dirname(fullPath), { recursive: true });
@@ -87,11 +112,21 @@ export const uploadCaseFileToStorage = async ({ file, caseId, fileId }) => {
 
 export const deleteFileFromStorage = async (objectKey) => {
   if (bucketName) {
-    const command = new DeleteObjectCommand({
-      Bucket: bucketName,
-      Key: objectKey,
-    });
-    await s3Client.send(command);
+    try {
+      const command = new DeleteObjectCommand({
+        Bucket: bucketName,
+        Key: objectKey,
+      });
+      await s3Client.send(command);
+    } catch (s3Error) {
+      console.warn("S3 delete failed, falling back to local storage:", s3Error.message);
+      try {
+        const fullPath = path.join(localUploadsDir, objectKey);
+        await fs.unlink(fullPath);
+      } catch (error) {
+        console.error("Local file delete failed:", error);
+      }
+    }
   } else {
     try {
       const fullPath = path.join(localUploadsDir, objectKey);
