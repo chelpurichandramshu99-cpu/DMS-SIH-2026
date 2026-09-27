@@ -23,9 +23,7 @@ export const authorize = (...requiredPermissions) => {
               permissions: {
                 where: {
                   permission: {
-                    is: {
-                      isActive: true,
-                    },
+                    isActive: true,
                   },
                 },
                 include: {

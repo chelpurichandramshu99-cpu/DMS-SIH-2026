@@ -49,4 +49,12 @@ app.get('/api/health/db', async (req, res) => {
     }
 });
 
+// Global error handler
+app.use((err, req, res, next) => {
+    console.error("Global Error:", err.message, err.stack);
+    res.status(err.statusCode || 500).json({
+        message: err.message || "Internal server error"
+    });
+});
+
 export default app;

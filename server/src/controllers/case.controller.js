@@ -20,7 +20,8 @@ export const createCaseController = async (req, res, next) => {
       case: caseRecord,
     });
   } catch (error) {
-    next(error);
+    console.error("Create Case Error:", error.message, error.stack);
+    return res.status(500).json({ message: "Failed to create case record: " + error.message });
   }
 };
 
@@ -32,7 +33,8 @@ export const getCasesController = async (req, res, next) => {
       cases,
     });
   } catch (error) {
-    next(error);
+    console.error("Get Cases Error:", error.message, error.stack);
+    return res.status(500).json({ message: "Failed to load official case records: " + error.message });
   }
 };
 
