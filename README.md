@@ -1,4 +1,4 @@
-# Digital Evidence & Case Management System (DMS)
+# Secure Digital Document Management System for Legal and Investigation Documents 
 
 Official Digital Evidence Management System (DMS) built for law enforcement, investigative agencies, and judicial authorities. This platform enforces **Zero-Trust Access Control (RBAC & ABAC)**, chain-of-custody integrity for digital evidence, and real-time administrative workflows.
 
