@@ -73,6 +73,19 @@ export const hasCaseScopeAccess = async ({ userId, caseId, scope }) => {
     return true;
   }
 
+  // Any user explicitly assigned to the case always has access
+  const isAssigned = await prisma.caseAssignment.findFirst({
+    where: {
+      caseId,
+      userId,
+      status: "ACTIVE",
+    },
+  });
+
+  if (isAssigned) {
+    return true;
+  }
+
   if (scope === SCOPE.ORGANIZATION) {
     return true;
   }

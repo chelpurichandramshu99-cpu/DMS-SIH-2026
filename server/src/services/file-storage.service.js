@@ -1,13 +1,14 @@
-import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { GetObjectCommand } from "@aws-sdk/client-s3";
-import { DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { PutObjectCommand, GetObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { calculateSHA256 } from "./file-hash.service.js";
-
 import s3Client from "../config/s3.js";
-
 import path from "node:path";
+import fs from "node:fs/promises";
+import { fileURLToPath } from "node:url";
 
 const bucketName = process.env.S3_BUCKET_NAME;
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const localUploadsDir = path.join(__dirname, "../../uploads");
 
 export const uploadFileToStorage = async (file) => {
   if (!file) {
@@ -18,38 +19,48 @@ export const uploadFileToStorage = async (file) => {
   const ext = path.extname(file.originalname || "") || "";
   const objectKey = `test/${Date.now()}-${file.originalname}`;
 
-  const command = new PutObjectCommand({
-    Bucket: bucketName,
-    Key: objectKey,
-    Body: file.buffer,
-    ContentType: file.mimetype,
-  });
-
-  await s3Client.send(command);
+  if (bucketName) {
+    const command = new PutObjectCommand({
+      Bucket: bucketName,
+      Key: objectKey,
+      Body: file.buffer,
+      ContentType: file.mimetype,
+    });
+    await s3Client.send(command);
+  } else {
+    const fullPath = path.join(localUploadsDir, objectKey);
+    await fs.mkdir(path.dirname(fullPath), { recursive: true });
+    await fs.writeFile(fullPath, file.buffer);
+  }
 
   return {
     objectKey,
-    bucket: bucketName,
+    bucket: bucketName || "local",
     sha256
   };
 };
 
 export const getFileFromStorage = async (objectKey) => {
-  const command = new GetObjectCommand({
-    Bucket: bucketName,
-    Key: objectKey,
-  });
-
-  const response = await s3Client.send(command);
-
-  return response;
+  if (bucketName) {
+    const command = new GetObjectCommand({
+      Bucket: bucketName,
+      Key: objectKey,
+    });
+    return await s3Client.send(command);
+  } else {
+    const fullPath = path.join(localUploadsDir, objectKey);
+    const buffer = await fs.readFile(fullPath);
+    // Mock the S3 GetObjectCommand response structure
+    return {
+      Body: {
+        transformToByteArray: async () => new Uint8Array(buffer),
+        // If the codebase uses other properties, add them here
+      },
+    };
+  }
 };
 
-export const uploadCaseFileToStorage = async ({
-  file,
-  caseId,
-  fileId,
-}) => {
+export const uploadCaseFileToStorage = async ({ file, caseId, fileId }) => {
   if (!file) {
     throw new Error("File is required");
   }
@@ -57,23 +68,36 @@ export const uploadCaseFileToStorage = async ({
   const ext = path.extname(file.originalname || "") || "";
   const objectKey = `cases/${caseId}/files/${fileId}${ext}`;
 
-  const command = new PutObjectCommand({
-    Bucket: bucketName,
-    Key: objectKey,
-    Body: file.buffer,
-    ContentType: file.mimetype,
-  });
-
-  await s3Client.send(command);
+  if (bucketName) {
+    const command = new PutObjectCommand({
+      Bucket: bucketName,
+      Key: objectKey,
+      Body: file.buffer,
+      ContentType: file.mimetype,
+    });
+    await s3Client.send(command);
+  } else {
+    const fullPath = path.join(localUploadsDir, objectKey);
+    await fs.mkdir(path.dirname(fullPath), { recursive: true });
+    await fs.writeFile(fullPath, file.buffer);
+  }
 
   return objectKey;
 };
 
 export const deleteFileFromStorage = async (objectKey) => {
-  const command = new DeleteObjectCommand({
-    Bucket: bucketName,
-    Key: objectKey,
-  });
-
-  await s3Client.send(command);
+  if (bucketName) {
+    const command = new DeleteObjectCommand({
+      Bucket: bucketName,
+      Key: objectKey,
+    });
+    await s3Client.send(command);
+  } else {
+    try {
+      const fullPath = path.join(localUploadsDir, objectKey);
+      await fs.unlink(fullPath);
+    } catch (error) {
+      console.error("Local file delete failed:", error);
+    }
+  }
 };
